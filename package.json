@@ -1,7 +1,7 @@
 {
   "name": "taskflow",
   "version": "1.0.0",
-  "main": "expo-router/entry",
+  "main": "App.tsx",
   "dependencies": {
     "@expo/ui": "~58.0.29",
     "expo": "~58.0.26",
