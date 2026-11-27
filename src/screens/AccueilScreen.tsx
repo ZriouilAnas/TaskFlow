@@ -1,6 +1,5 @@
-// src/screens/AccueilScreen.tsx
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, StyleSheet, SafeAreaView, Pressable } from 'react-native';
 import TacheCard from '../components/TacheCard';
 import { COULEURS } from '../styles/couleurs';
 
@@ -11,15 +10,24 @@ export interface Tache {
   terminee: boolean;
 }
 
-const TACHES: Tache[] = [
-  { id: '1', titre: 'Créer un la maquette', categorie: 'Design', terminee: true },
-  { id: '2', titre: 'Installer expo', categorie: 'Setup', terminee: true },
-  { id: '3', titre: "Composant TacheCard", categorie: 'Dev', terminee: false },
-  { id: '4', titre: 'Ecran d\'accueil', categorie: 'Dev', terminee: false },
-  { id: '5', titre: 'Tester sur téléphone', categorie: 'QA', terminee: false },
-];
 
 export default function AccueilScreen() {
+  const [taches, setTaches] = useState<Tache[]>([
+  { id: '1', titre: 'Créer la maquette', categorie: 'Design', terminee: true },
+  { id: '2', titre: 'Installer Expo', categorie: 'Setup', terminee: true },
+  { id: '3', titre: 'Composant TacheCard', categorie: 'Dev', terminee: false },
+  { id: '4', titre: "Écran d'accueil", categorie: 'Dev', terminee: false },
+  { id: '5', titre: 'Tester sur téléphone', categorie: 'QA', terminee: false },
+]);
+
+  const basculerTache = (id: string): void => {
+    setTaches((tachesPrecedentes: Tache[]) =>
+      tachesPrecedentes.map((tache: Tache) =>
+        tache.id === id ? { ...tache, terminee: !tache.terminee } : tache
+      )
+    );
+  };
+
   return (
     <SafeAreaView style={styles.ecran}>
       <View style={styles.entete}>
@@ -32,13 +40,19 @@ export default function AccueilScreen() {
         contentContainerStyle={styles.contenuListe}
         showsVerticalScrollIndicator={false}
       >
-        {TACHES.map((tache: Tache) => (
-          <TacheCard
+        {taches.map((tache: Tache) => (
+          <Pressable
             key={tache.id}
-            titre={tache.titre}
-            categorie={tache.categorie}
-            terminee={tache.terminee}
-          />
+            onPress={() => basculerTache(tache.id)}
+            // accessibilityRole="button"
+            // accessibilityLabel={`${tache.titre}, ${tache.terminee ? 'terminée' : 'à faire'}`}
+          >
+            <TacheCard
+              titre={tache.titre}
+              categorie={tache.categorie}
+              terminee={tache.terminee}
+            />
+          </Pressable>
         ))}
       </ScrollView>
     </SafeAreaView>
